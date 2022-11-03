@@ -42,5 +42,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: zlog package
-          path: ${{env.DEBPKG_DIR}}
+          name: zlog
+          path: ./zlog_1.2.16_amd64.deb
