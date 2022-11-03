@@ -36,6 +36,5 @@ jobs:
           package_root: ${{env.DEBPKG_DIR}}
           maintainer: Frank,H.L.Lai <frank@leadstec.com>
           version: ${{env.ZLOG_VERSION}}
-          arch: 'amd64'
-          depends: ''
+          arch: ${{matrix.arch}}
           desc: 'zlog package for ubuntu/debian'
