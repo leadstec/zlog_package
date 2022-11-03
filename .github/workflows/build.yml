@@ -38,3 +38,9 @@ jobs:
           version: ${{env.ZLOG_VERSION}}
           arch: 'amd64'
           desc: 'zlog package for ubuntu/debian'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: zlog package
+          path: ${{env.DEBPKG_DIR}}
