@@ -1,0 +1,41 @@
+name: packager
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ZLOG_VERSION: 1.2.16
+      DEBPKG_DIR: .debpkg
+
+    steps:
+      - name: Download and extract code package
+        run: | 
+          curl -LfS https://github.com/HardySimpson/zlog/archive/refs/tags/${{env.ZLOG_VERSION}}.tar.gz -o zlog-${{env.ZLOG_VERSION}}.tar.gz
+          tar -zxvf zlog-${{env.ZLOG_VERSION}}.tar.gz
+
+      - name: Create package directory
+        run: |
+          mkdir -p ${{env.DEBPKG_DIR}}/usr/bin
+          cd zlog-${{env.ZLOG_VERSION}}
+          make PREFIX=${{env.DEBPKG_DIR}}/usr
+          make PREFIX=${{env.DEBPKG_DIR}}/usr install
+
+      - name: Compile
+        run: | # compile and build
+          cd zlog-${{env.ZLOG_VERSION}}
+          make PREFIX=${{env.DEBPKG_DIR}}/usr
+          make PREFIX=${{env.DEBPKG_DIR}}/usr install
+
+      - name: Build deb package
+        uses: jiro4989/build-deb-action@v2
+        with:
+          package: zlog
+          package_root: ${{env.DEBPKG_DIR}}
+          maintainer: Frank,H.L.Lai <frank@leadstec.com>
+          version: ${{env.ZLOG_VERSION}}
+          arch: 'amd64'
+          depends: ''
+          desc: 'zlog package for ubuntu/debian'
